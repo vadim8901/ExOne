@@ -1,18 +1,20 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-public abstract class Window extends JFrame{
+
+
+public class Window extends JFrame{
+
 
     public Window(){
         setTitle("Window");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JMenuBar menuButton = new JMenuBar();
+        menuButton.add(createFile());
         menuButton.add(createSketchMenu());
+        menuButton.add(create3Dmodel());
         setJMenuBar(menuButton);
         setBounds(300, 300, 400, 400);
         setVisible(true);
@@ -20,22 +22,34 @@ public abstract class Window extends JFrame{
 
     private JMenu createSketchMenu(){
         JMenu sketch = new JMenu("Эскиз");
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File("picture/line.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        JLabel img = new JLabel(new ImageIcon(image));
         JMenuItem line = new JMenuItem("Отрезок");
+        line.setIcon(new ImageIcon(" picture/line.png"));
         sketch.add(line);
-        sketch.addActionListener(new ActionListener()
+        line.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("ActionListener.actionPerformed : sketch");
+                System.out.println ("ActionListener.actionPerformed : line");
+                JFrame frame = new JFrame("Paint");
+                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+                JPanel panel = new PaintPanel();
+                frame.add(panel);
+
+                frame.pack();
+                frame.setVisible(true);
             }
         });
         return sketch;
+    }
+
+    private JMenu create3Dmodel(){
+        JMenu model = new JMenu("Модель");
+        return model;
+    }
+
+    private JMenu createFile(){
+        JMenu file = new JMenu("Файл");
+        return file;
     }
 }
